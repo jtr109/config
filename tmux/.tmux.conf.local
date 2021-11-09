@@ -411,3 +411,73 @@ tmux_conf_update_plugins_on_reload=true
 #
 # "$@"
 # # /!\ do not remove the previous line
+
+bind -n S-Left {
+  copy-mode
+  send -X clear-selection
+  send -X start-of-line
+  send -X start-of-line
+  send -X cursor-up
+  send -X start-of-line
+  send -X start-of-line
+
+  if -F "#{m:*❯\u00A0*,#{copy_cursor_line}}" {
+    send -X search-forward-text "❯\u00A0"
+    send -X stop-selection
+    send -X -N 2 cursor-right
+    send -X begin-selection
+    send -X end-of-line
+    send -X end-of-line
+    if "#{m:*❯\u00A0?*,#{copy_cursor_line}}" {
+      send -X cursor-left
+    }
+  } {
+    send -X end-of-line
+    send -X end-of-line
+    send -X begin-selection
+    send -X search-backward-text "❯\u00A0"
+    send -X end-of-line
+    send -X end-of-line
+    send -X cursor-right
+    send -X stop-selection
+  }
+}
+
+# # copy last command output
+# # credit: copy from https://github.com/laixintao/myrc/blob/9a6fe73e55162e467772d7776dbd92c86af151f7/.tmux.conf
+# bind -n S-Left {
+#   copy-mode
+#   send -X clear-selection
+#   send -X start-of-line
+#   send -X start-of-line
+#   send -X cursor-up
+#   send -X start-of-line
+#   send -X start-of-line
+
+#   # if -F "#{m:*➜ *,#{copy_cursor_line}}" {
+#   if -F "#{m:*❯ *,#{copy_cursor_line}}" {
+#     # send -X search-forward-text "➜ "
+#     send -X search-forward-text "❯ "
+#     send -X stop-selection
+#     send -X -N 2 cursor-right
+#     send -X begin-selection
+#     send -X end-of-line
+#     send -X end-of-line
+#     # if "#{m:*➜ ?*,#{copy_cursor_line}}" {
+#     if "#{m:*❯ ?*,#{copy_cursor_line}}" {
+#       send -X cursor-left
+#     }
+#   } {
+#     send -X end-of-line
+#     send -X end-of-line
+#     send -X begin-selection
+#     # send -X search-backward-text "➜ "
+#     send -X search-backward-text "❯ "
+#     send -X end-of-line
+#     send -X end-of-line
+#     send -X cursor-right
+#     send -X stop-selection
+#   }
+# }
+
+# bind-key -n S-Right next-window
